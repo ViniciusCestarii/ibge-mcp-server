@@ -10,4 +10,16 @@ Siga as instruções:
 2. Para consultar um agregado específico, use o **id do agregado**.
 
    * Tool: `agregado-metadados`
-   * Esse endpoint fornece metadados (Busca metadados (variáveis, nivelTerritorial, etc.) de um agregado por id).
+    * Parâmetros necessários:
+      - `id`: O ID do agregado que você deseja consultar (ex: "6579", "6578", etc.).
+   * Esse endpoint fornece metadados (Busca metadados (variáveis, nivelTerritorial, periodicidade, etc.) de um agregado por id).
+
+3. Para obter dados específicos de um agregado, você precisará dos seguintes parâmetros:
+    * Tool: `agregado-dados`
+    * Parâmetros necessários:
+      - `agregadoId`: O ID do agregado que você deseja consultar.
+      - `periodo`: O período para o qual você deseja os dados (ex: "2020", "2019-2021").
+      - `variavelId`: O ID da variável que você deseja consultar (obtido dos metadados).
+      - `localidades`: As localidades para as quais você deseja os dados (ex: "all" para todas as localidades, ou códigos específicos separados por vírgula).
+      - `classificacao` (opcional): A classificação específica se aplicável.
+    * Isso retornará os dados do agregado para os parâmetros fornecidos.

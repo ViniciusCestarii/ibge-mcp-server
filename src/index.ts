@@ -10,7 +10,7 @@ const server = new FastMCP({
 const tools = Object.values(importedTools);
 
 for (const tool of tools) {
-  server.addTool(tool);
+  server.addTool(tool as any);
 }
 
 server.start({

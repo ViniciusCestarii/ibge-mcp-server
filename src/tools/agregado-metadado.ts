@@ -4,7 +4,7 @@ import { z } from "zod";
 
 export const agregadoMetadadoTool = {
   name: "agregado-metadado",
-  description: "Busca metadados (variáveis, nivelTerritorial, etc.) de um agregado por id",
+  description: "Busca metadados (variáveis, nivelTerritorial, periodicidade, etc.) de um agregado por id",
   parameters: z.object({
     id: z.string()
   }),
