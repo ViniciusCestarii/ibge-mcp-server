@@ -1,13 +1,17 @@
 import { FastMCP } from "fastmcp";
-import { addTool } from "./tools/add.js";
 import env from "./env.js";
+import * as importedTools from "./tools"
 
 const server = new FastMCP({
   name: "IBGE MCP Server",
   version: "1.0.0",
 });
 
-server.addTool(addTool);
+const tools = Object.values(importedTools);
+
+for (const tool of tools) {
+  server.addTool(tool);
+}
 
 server.start({
   transportType: env.TRANSPORT_TYPE,
