@@ -5,6 +5,9 @@ import * as importedTools from "./tools"
 const server = new FastMCP({
   name: "IBGE MCP Server",
   version: "1.0.0",
+  roots: {
+    enabled: false
+  }
 });
 
 const tools = Object.values(importedTools);
