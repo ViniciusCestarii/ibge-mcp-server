@@ -29,6 +29,11 @@ export const agregadoDadosTool = {
 
     const response = await axios.get<object[]>(url);
 
-    return JSON.stringify(response.data, null, 2);
+    const dados = {
+      "fonteUrl": url,
+      "dados": response.data
+    }
+
+    return JSON.stringify(dados, null, 2);
   },
 };
