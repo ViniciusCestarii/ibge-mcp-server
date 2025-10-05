@@ -21,7 +21,7 @@ export const agregadoDadosTool = {
   }): Promise<string> => {
     const { agregadoId, periodo, variavelId, localidades, classificacao } = args;
 
-    let url = `${env.IBGE_API}/${agregadoId}/periodos/${periodo}/variaveis/${variavelId}?localidades=${encodeURIComponent(localidades)}`;
+    let url = `${env.IBGE_API_AGREGADOS}/${agregadoId}/periodos/${periodo}/variaveis/${variavelId}?localidades=${encodeURIComponent(localidades)}`;
 
     if (classificacao) {
       url += `&classificacao=${encodeURIComponent(classificacao)}`;

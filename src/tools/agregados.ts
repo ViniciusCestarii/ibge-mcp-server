@@ -1,7 +1,7 @@
 import axios from "axios";
 import env from "@/env";
 import { z } from "zod";
-import { AgregadoResponse, Pesquisa } from "@/types/ibge";
+import { AgregadoResponse, Pesquisa } from "@/types/agregado";
 
 export const agregadosTool = {
   name: "agregados",
@@ -10,7 +10,7 @@ export const agregadosTool = {
     pesquisaId: z.string()
   }),
   execute: async (args: { pesquisaId: string }): Promise<string> => {
-    const response = await axios.get<Pesquisa[]>(env.IBGE_API);
+    const response = await axios.get<Pesquisa[]>(env.IBGE_API_AGREGADOS);
 
     const pesquisa = response.data.filter((pesquisa) => pesquisa.id === args.pesquisaId)[0];
 

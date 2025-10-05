@@ -1,7 +1,7 @@
 import axios from "axios";
 import env from "@/env";
 import { z } from "zod";
-import { AgregadoMetadados, AgregadoMetadadosResponse } from "@/types/ibge";
+import { AgregadoMetadados, AgregadoMetadadosResponse } from "@/types/agregado";
 
 export const agregadoMetadadoTool = {
   name: "agregado-metadados",
@@ -10,7 +10,7 @@ export const agregadoMetadadoTool = {
     agregadoId: z.string()
   }),
   execute: async (args: {agregadoId: string}): Promise<string> => {
-    const response = await axios.get<AgregadoMetadados>(`${env.IBGE_API}/${args.agregadoId}/metadados`);
+    const response = await axios.get<AgregadoMetadados>(`${env.IBGE_API_AGREGADOS}/${args.agregadoId}/metadados`);
 
     const data = response.data;
 
