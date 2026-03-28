@@ -6,7 +6,15 @@ import { Pesquisa, PesquisaResponse } from "../types/agregado.js";
 export function registerPesquisasTool(server: McpServer) {
   server.registerTool(
     "pesquisas",
-    { description: "Busca pesquisas do IBGE" },
+    {
+      description: "Busca pesquisas do IBGE",
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: true,
+      }
+    },
     async () => {
       const response = await axios.get<Pesquisa[]>(env.IBGE_API_AGREGADOS);
 
