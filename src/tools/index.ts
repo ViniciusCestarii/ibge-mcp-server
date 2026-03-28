@@ -1,1 +1,1 @@
-export { registerPesquisasTool } from "./pesquisas.js";
+export { registerPesquisasTool } from "./pesquisas.js"

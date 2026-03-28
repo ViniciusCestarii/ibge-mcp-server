@@ -1,33 +1,35 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
-import { createServer } from "node:http";
-import env from "./env.js";
-import * as registerTool from './tools/index.js';
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
+import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js"
+import { createServer } from "node:http"
+import env from "./env.js"
+import * as registerTool from "./tools/index.js"
 
 const server = new McpServer({
   name: "IBGE MCP Server",
   version: "1.0.0",
-});
+})
 
-const tools = Object.values(registerTool);
+const tools = Object.values(registerTool)
 
 for (const tool of tools) {
-  tool(server);
+  tool(server)
 }
 
 if (env.TRANSPORT_TYPE === "httpStream") {
-  const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
-  await server.connect(transport);
+  const transport = new StreamableHTTPServerTransport({
+    sessionIdGenerator: undefined,
+  })
+  await server.connect(transport)
 
   const httpServer = createServer((req, res) => {
-    transport.handleRequest(req, res);
-  });
+    transport.handleRequest(req, res)
+  })
 
   httpServer.listen(env.PORT, () => {
-    console.log(`IBGE MCP Server listening on http://localhost:${env.PORT}`);
-  });
+    console.log(`IBGE MCP Server listening on http://localhost:${env.PORT}`)
+  })
 } else {
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
+  const transport = new StdioServerTransport()
+  await server.connect(transport)
 }
