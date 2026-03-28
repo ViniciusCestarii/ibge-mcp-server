@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  TRANSPORT_TYPE: z.enum(["stdio", "httpStream"]).optional(),
-  PORT: z.preprocess((val) => (val === undefined ? undefined : Number(val)), z.number().int().min(1).max(65535).default(3000)),
-  IBGE_API_AGREGADOS: z.string().url().default("https://servicodados.ibge.gov.br/api/v3/agregados"),
-  IBGE_API_LOCALIDADES: z.string().url().default("https://servicodados.ibge.gov.br/api/v1/localidades"),
+  TRANSPORT_TYPE: z.enum(["stdio", "httpStream"]).default("stdio"),
+  PORT: z.preprocess((val) => (val === undefined ? undefined : Number(val)), z.number().int().default(3000)),
+  IBGE_API_AGREGADOS: z.url().default("https://servicodados.ibge.gov.br/api/v3/agregados"),
+  IBGE_API_LOCALIDADES: z.url().default("https://servicodados.ibge.gov.br/api/v1/localidades"),
 });
 
 const envParse = envSchema.safeParse(process.env);

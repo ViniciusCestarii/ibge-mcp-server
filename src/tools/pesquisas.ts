@@ -1,20 +1,23 @@
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import axios from "axios";
-import env from "@/env";
-import { Pesquisa, PesquisaResponse } from "@/types/agregado";
+import env from "../env.js";
+import { Pesquisa, PesquisaResponse } from "../types/agregado.js";
 
-export const pesquisasTool = {
-  name: "pesquisas",
-  description: "Busca pesquisas do IBGE",
-  execute: async (): Promise<string> => {
-    const response = await axios.get<Pesquisa[]>(env.IBGE_API_AGREGADOS);
+export function registerPesquisasTool(server: McpServer) {
+  server.registerTool(
+    "pesquisas",
+    { description: "Busca pesquisas do IBGE" },
+    async () => {
+      const response = await axios.get<Pesquisa[]>(env.IBGE_API_AGREGADOS);
 
-    const pesquisas: PesquisaResponse[] = response.data.map((pesquisa) => {
-      return {
+      const pesquisas: PesquisaResponse[] = response.data.map((pesquisa) => ({
         pesquisaId: pesquisa.id,
-        nome: pesquisa.nome
-      }
-    });
+        nome: pesquisa.nome,
+      }));
 
-    return JSON.stringify(pesquisas, null, 2);
-  },
-};
+      return {
+        content: [{ type: "text", text: JSON.stringify(pesquisas, null, 2) }],
+      };
+    }
+  );
+}

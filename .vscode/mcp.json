@@ -1,8 +1,0 @@
-{
-"servers": {
-  "fetch": {
-    "command": "node",
-    "args": ["dist/index.js"],
-  }
- }
-}
