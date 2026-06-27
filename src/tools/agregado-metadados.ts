@@ -20,7 +20,11 @@ export function registerAgregadoMetadadosTool(server: McpServer) {
         openWorldHint: true,
       },
       inputSchema: {
-        agregadoId: z.string(),
+        agregadoId: z
+          .string()
+          .describe(
+            "Id do agregado, obtido pela ferramenta 'agregados'. Ex.: '6579'.",
+          ),
       },
     },
     async ({ agregadoId }) => {

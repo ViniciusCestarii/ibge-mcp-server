@@ -16,7 +16,11 @@ export function registerAgregadosTool(server: McpServer) {
         openWorldHint: true,
       },
       inputSchema: {
-        pesquisaId: z.string(),
+        pesquisaId: z
+          .string()
+          .describe(
+            "Id da pesquisa, obtido pela ferramenta 'pesquisas'. Ex.: 'CD'.",
+          ),
       },
     },
     async ({ pesquisaId }) => {
