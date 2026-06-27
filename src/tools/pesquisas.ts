@@ -1,7 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import axios from "axios"
-import env from "../env.js"
-import { Pesquisa, PesquisaResponse } from "../types/agregado.js"
+import env from "@/env.js"
+import { Pesquisa, PesquisaResponse } from "@/types/agregado.js"
 
 export function registerPesquisasTool(server: McpServer) {
   server.registerTool(

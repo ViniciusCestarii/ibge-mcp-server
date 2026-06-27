@@ -1,1 +1,4 @@
 export { registerPesquisasTool } from "./pesquisas.js"
+export { registerAgregadosTool } from "./agregados.js"
+export { registerAgregadoMetadadosTool } from "./agregado-metadados.js"
+export { registerAgregadoDadosTool } from "./agregado-dados.js"
