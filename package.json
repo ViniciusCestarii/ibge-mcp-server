@@ -10,7 +10,8 @@
     "inspect": "npx @modelcontextprotocol/inspector@0.22.0 tsx src/index.ts",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "test": "node --import tsx --test test/**/*.test.ts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
