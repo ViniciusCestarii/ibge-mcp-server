@@ -31,6 +31,14 @@ export const evalCases: EvalCase[] = [
     note: "Baseline: município (N6), estimativa de 2018.",
   },
   {
+    prompt:
+      "oi, vc sabe qnts pessoa moravam em brasilia em 2018? é pra um trabalho da facul, obg",
+    expectedValue: 2974703,
+    tolerance: 0,
+    category: "populacao",
+    note: "Mesmo dado do baseline acima, perguntado como um cidadão comum perguntaria.",
+  },
+  {
     prompt: "Qual foi a população total do Brasil no Censo de 2022?",
     expectedValue: 203080756,
     tolerance: 0,
