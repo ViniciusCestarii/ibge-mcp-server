@@ -111,10 +111,10 @@ export const evalCases: EvalCase[] = [
   // --- Registro Civil -----------------------------------------------------
   {
     prompt:
-      "Quantos nascidos vivos, nascidos em 2021, foram registrados no Brasil em 2021?",
+      "Quantos nascidos vivos, nascidos em 2021, foram registrados no Brasil em 2021, por lugar do registro?",
     expectedValue: 2635854,
     tolerance: 0.001,
     category: "registro-civil",
-    note: "Estatísticas do Registro Civil. Agregado 2679, variável 217, classificação 232[58297] (ano de nascimento = 2021). O prompt precisa fixar o ano de nascimento: somando todos os anos de nascimento, os registros de 2021 dão 2.708.884.",
+    note: "Estatísticas do Registro Civil. Agregado 2679, variável 217, classificação 232[58297] (ano de nascimento = 2021). O prompt precisa fixar dois recortes, senão há mais de uma resposta certa: (1) ano de nascimento — somando todos os anos de nascimento, os registros de 2021 dão 2.708.884; (2) critério territorial — pelo lugar de residência da mãe (agregado 2609) o mesmo recorte dá 2.630.703.",
   },
 ]
