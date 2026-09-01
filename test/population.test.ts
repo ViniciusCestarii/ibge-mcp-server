@@ -1,39 +1,25 @@
 import assert from "node:assert/strict"
 import { after, before, describe, test } from "node:test"
-import { runAgent } from "./agent.js"
-import { GeminiProvider } from "./ai/gemini.js"
-import { AiProvider } from "./ai/provider.js"
 import { evalCases } from "./cases.js"
 import { compareNumber } from "./compare.js"
-import testEnv from "./env.js"
-import { McpTestClient } from "./mcp-client.js"
+import { createRunner } from "./runners/index.js"
 
-describe("IBGE data answers via MCP + AI provider", () => {
-  const client = new McpTestClient()
-
-  // Swap this for any other AiProvider implementation to test a different model.
-  const provider: AiProvider = new GeminiProvider({
-    apiKey: testEnv.GEMINI_API_KEY,
-    model: testEnv.GEMINI_MODEL,
-  })
+describe("IBGE data answers via MCP", () => {
+  // Selected by TEST_RUNNER: our own agent loop over a raw provider, or the
+  // Claude Code harness driving itself.
+  const runner = createRunner(true)
 
   before(async () => {
-    await client.connect()
+    await runner.setup()
   })
 
   after(async () => {
-    await client.close()
+    await runner.teardown()
   })
 
   for (const testCase of evalCases) {
-    test(`[${provider.name}] (${testCase.category}) ${testCase.prompt}`, async () => {
-      const run = await runAgent({
-        provider,
-        client,
-        prompt: testCase.prompt,
-        maxIterations: testEnv.AGENT_MAX_ITERATIONS,
-        verbose: true,
-      })
+    test(`[${runner.name}] (${testCase.category}) ${testCase.prompt}`, async () => {
+      const run = await runner.run(testCase.prompt)
 
       console.log(
         `\nTools called: ${run.steps.map((s) => s.toolName).join(" → ") || "(none)"}`,

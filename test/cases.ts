@@ -9,8 +9,8 @@ export type EvalCategory =
 export interface EvalCase {
   prompt: string
   /**
-   * The real value the answer must contain. Set to 0 as a placeholder when the
-   * exact IBGE figure still needs to be looked up (see `note`).
+   * The real value the answer must contain, taken from the IBGE API itself
+   * (see `note` for the aggregate/variable it came from).
    */
   expectedValue: number
   /** Allowed relative error (0 = must match exactly). */
@@ -40,54 +40,54 @@ export const evalCases: EvalCase[] = [
   {
     prompt:
       "Entre São Paulo e Rio de Janeiro, qual cidade tinha mais habitantes no Censo de 2022 e quantos?",
-    expectedValue: 11451245,
+    expectedValue: 11451999,
     tolerance: 0,
     category: "populacao",
-    note: "Complexo: busca duas cidades e compara; resposta = São Paulo. VERIFICAR valor.",
+    note: "Complexo: busca duas cidades e compara; resposta = São Paulo. Agregado 4714, variável 93 (Rio de Janeiro: 6.211.223).",
   },
 
   // --- Domicílios ---------------------------------------------------------
   {
     prompt:
       "Quantos domicílios particulares permanentes ocupados havia no Brasil no Censo de 2022?",
-    expectedValue: 0,
+    expectedValue: 72456368,
     tolerance: 0.001,
     category: "domicilios",
-    note: "TODO: preencher valor. Pesquisa do Censo, variável de domicílios.",
+    note: "Agregado 4712, variável 381 (Domicílios particulares permanentes ocupados), N1.",
   },
 
   // --- Economia (PIB / empresas) -----------------------------------------
   {
     prompt: "Qual foi o PIB do município de São Paulo em 2020, em mil reais?",
-    expectedValue: 0,
+    expectedValue: 746909330,
     tolerance: 0.001,
     category: "economia",
-    note: "TODO: preencher valor. Pesquisa 'Produto Interno Bruto dos Municípios'.",
+    note: "Agregado 5938, variável 37 (PIB a preços correntes, em mil reais), N6[3550308].",
   },
   {
     prompt:
-      "Quantas empresas e outras organizações ativas existiam no Brasil no último ano disponível?",
-    expectedValue: 0,
+      "Quantas empresas e outras organizações ativas existiam no Brasil no ano 2024?",
+    expectedValue: 11222295,
     tolerance: 0.001,
     category: "economia",
-    note: "TODO: preencher valor. CEMPRE; exige descobrir o último período ('-1').",
+    note: "CEMPRE; Agregado 9509, variável 367; valor de 2024.",
   },
 
   // --- Agropecuária -------------------------------------------------------
   {
     prompt:
       "Qual foi a quantidade produzida de soja (em grão) no Brasil em 2021, em toneladas?",
-    expectedValue: 0,
+    expectedValue: 134799179,
     tolerance: 0.005,
     category: "agropecuaria",
-    note: "TODO: preencher valor. Produção Agrícola Municipal (PAM), classificação por produto = soja.",
+    note: "Produção Agrícola Municipal (PAM), classificação por produto = soja. Agregado 1612, variável 214, classificação 81[2713].",
   },
   {
     prompt: "Qual era o efetivo de bovinos no Brasil em 2021, em cabeças?",
-    expectedValue: 0,
+    expectedValue: 224601992,
     tolerance: 0.005,
     category: "agropecuaria",
-    note: "TODO: preencher valor. Pesquisa da Pecuária Municipal (PPM).",
+    note: "Pesquisa da Pecuária Municipal (PPM). Agregado 3939, variável 105, classificação 79[2670].",
   },
 
   // --- Preços (decimal / percentual) -------------------------------------
@@ -97,15 +97,16 @@ export const evalCases: EvalCase[] = [
     expectedValue: 5.79,
     tolerance: 0.02,
     category: "precos",
-    note: "Valor decimal/percentual. CONFIRMAR (IPCA acumulado 2022 ≈ 5,79%).",
+    note: "Valor decimal/percentual. Agregado 1737, variável 69 (variação acumulada no ano), período 202212 = 5,79%.",
   },
 
   // --- Registro Civil -----------------------------------------------------
   {
-    prompt: "Quantos nascidos vivos foram registrados no Brasil em 2021?",
-    expectedValue: 0,
+    prompt:
+      "Quantos nascidos vivos, nascidos em 2021, foram registrados no Brasil em 2021?",
+    expectedValue: 2635854,
     tolerance: 0.001,
     category: "registro-civil",
-    note: "TODO: preencher valor. Estatísticas do Registro Civil.",
+    note: "Estatísticas do Registro Civil. Agregado 2679, variável 217, classificação 232[58297] (ano de nascimento = 2021). O prompt precisa fixar o ano de nascimento: somando todos os anos de nascimento, os registros de 2021 dão 2.708.884.",
   },
 ]

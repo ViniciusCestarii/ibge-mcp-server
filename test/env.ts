@@ -7,11 +7,19 @@ const testDir = path.dirname(fileURLToPath(import.meta.url))
 
 dotenv.config({ path: path.resolve(testDir, ".env.test") })
 
+/**
+ * Which harness answers the eval prompts. Keys are validated per runner in
+ * `runners/index.ts`, so running Claude Code does not require a Gemini key and
+ * vice versa.
+ */
+export const TEST_RUNNERS = ["gemini", "claude-code"] as const
+
 const envSchema = z.object({
-  GEMINI_API_KEY: z
-    .string()
-    .min(1, "GEMINI_API_KEY is required in test/.env.test"),
+  TEST_RUNNER: z.enum(TEST_RUNNERS).default("gemini"),
+  GEMINI_API_KEY: z.string().optional(),
   GEMINI_MODEL: z.string().default("gemini-2.5-flash"),
+  /** Omit to let Claude Code use its own configured default model. */
+  CLAUDE_CODE_MODEL: z.string().optional(),
   AGENT_MAX_ITERATIONS: z.coerce.number().int().positive().default(8),
 })
 

@@ -1,25 +1,7 @@
 import { AiProvider, ProviderMessage } from "./ai/provider.js"
 import { McpTestClient } from "./mcp-client.js"
-
-const SYSTEM_PROMPT = `Você é um assistente que responde perguntas sobre dados do IBGE.
-Use as ferramentas disponíveis para descobrir ids de localidades, agregados, variáveis e buscar os dados antes de responder.
-Sempre que possível, descubra os ids necessários chamando as ferramentas em vez de adivinhar.
-Responda em português, de forma objetiva, incluindo o número exato encontrado.`
-
-export interface AgentStep {
-  toolName: string
-  arguments: Record<string, unknown>
-  result: string
-}
-
-export interface AgentRun {
-  /** The model's final natural-language answer. */
-  answer: string
-  /** Every tool invocation made along the way, in order. */
-  steps: AgentStep[]
-  /** Number of generation rounds used. */
-  iterations: number
-}
+import { SYSTEM_PROMPT } from "./prompt.js"
+import { AgentRun, AgentStep } from "./runners/runner.js"
 
 export interface RunAgentOptions {
   provider: AiProvider
