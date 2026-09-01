@@ -5,6 +5,8 @@ export type EvalCategory =
   | "agropecuaria"
   | "precos"
   | "registro-civil"
+  /** Exige cruzar mais de uma pesquisa na mesma resposta. */
+  | "cruzado"
 
 export interface EvalCase {
   prompt: string
@@ -96,6 +98,24 @@ export const evalCases: EvalCase[] = [
     tolerance: 0.005,
     category: "agropecuaria",
     note: "Pesquisa da Pecuária Municipal (PPM). Agregado 3939, variável 105, classificação 79[2670].",
+  },
+
+  // --- Cruzado (duas pesquisas + ranking) --------------------------------
+  {
+    prompt:
+      "Entre todas as 27 unidades da federação, qual tinha o maior número de bovinos por habitante em 2022? " +
+      "Use o efetivo de bovinos da Pesquisa da Pecuária Municipal e a população residente do Censo 2022, " +
+      "e informe quantas cabeças por habitante são.",
+    expectedValue: 11.19,
+    tolerance: 0.02,
+    category: "cruzado",
+    note:
+      "O mais pesado da suíte: exige duas pesquisas em nível N3[all] (27 UFs cada, 54 séries no total), " +
+      "cruzar as duas listas por UF, dividir e ranquear. Resposta: Rondônia, 17.688.225 bovinos " +
+      "(agregado 3939, variável 105, classificação 79[2670]) / 1.581.196 habitantes " +
+      "(agregado 4714, variável 93) = 11,1866 cabeças/habitante. " +
+      "A margem para o 2º colocado é grande (Mato Grosso, 9,36), então arredondar não muda o vencedor; " +
+      "a tolerância de 2% aceita desde 'cerca de 11' até '11,19'.",
   },
 
   // --- Preços (decimal / percentual) -------------------------------------
