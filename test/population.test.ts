@@ -3,12 +3,12 @@ import { after, before, describe, test } from "node:test"
 import { runAgent } from "./agent.js"
 import { GeminiProvider } from "./ai/gemini.js"
 import { AiProvider } from "./ai/provider.js"
-import { populationCases } from "./cases.js"
-import { comparePopulation } from "./compare.js"
+import { evalCases } from "./cases.js"
+import { compareNumber } from "./compare.js"
 import testEnv from "./env.js"
 import { McpTestClient } from "./mcp-client.js"
 
-describe("IBGE population answers via MCP + AI provider", () => {
+describe("IBGE data answers via MCP + AI provider", () => {
   const client = new McpTestClient()
 
   // Swap this for any other AiProvider implementation to test a different model.
@@ -25,8 +25,8 @@ describe("IBGE population answers via MCP + AI provider", () => {
     await client.close()
   })
 
-  for (const testCase of populationCases) {
-    test(`[${provider.name}] ${testCase.prompt}`, async () => {
+  for (const testCase of evalCases) {
+    test(`[${provider.name}] (${testCase.category}) ${testCase.prompt}`, async () => {
       const run = await runAgent({
         provider,
         client,
@@ -40,15 +40,15 @@ describe("IBGE population answers via MCP + AI provider", () => {
       )
       console.log(`Answer: ${run.answer}\n`)
 
-      const comparison = comparePopulation(
+      const comparison = compareNumber(
         run.answer,
-        testCase.expectedPopulation,
+        testCase.expectedValue,
         testCase.tolerance ?? 0,
       )
 
       assert.ok(
         comparison.passed,
-        `Expected population ${testCase.expectedPopulation} not found in answer.\n` +
+        `Expected value ${testCase.expectedValue} not found in answer.\n` +
           `Closest number: ${comparison.closest} (relative error ${comparison.relativeError}).\n` +
           `Numbers seen: ${comparison.foundNumbers.join(", ")}\n` +
           `Answer: ${run.answer}`,
