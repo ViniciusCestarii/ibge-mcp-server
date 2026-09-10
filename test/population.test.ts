@@ -26,11 +26,7 @@ describe("IBGE data answers via MCP", () => {
       )
       console.log(`Answer: ${run.answer}\n`)
 
-      const comparison = compareNumber(
-        run.answer,
-        testCase.expectedValue,
-        testCase.tolerance ?? 0,
-      )
+      const comparison = compareNumber(run.answer, testCase.expectedValue)
 
       assert.ok(
         comparison.passed,

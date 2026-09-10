@@ -11,15 +11,10 @@ export interface ComparisonResult {
 /**
  * Checks whether the model's answer contains the expected number (population,
  * GDP, a count, a percentage, etc.).
- *
- * Handles pt-BR / en formatting by extracting numeric tokens and trying both
- * an integer reading (separators stripped) and a decimal reading, then accepts
- * a match within `tolerance` (relative) to allow for rounding in the answer.
  */
 export function compareNumber(
   answer: string,
   expected: number,
-  tolerance = 0,
 ): ComparisonResult {
   const foundNumbers = extractNumbers(answer)
 
@@ -28,7 +23,9 @@ export function compareNumber(
 
   for (const num of foundNumbers) {
     const error =
-      expected === 0 ? Math.abs(num) : Math.abs(num - expected) / Math.abs(expected)
+      expected === 0
+        ? Math.abs(num)
+        : Math.abs(num - expected) / Math.abs(expected)
     if (relativeError === null || error < relativeError) {
       relativeError = error
       closest = num
@@ -36,7 +33,7 @@ export function compareNumber(
   }
 
   return {
-    passed: relativeError !== null && relativeError <= tolerance,
+    passed: relativeError === 0,
     foundNumbers,
     closest,
     relativeError,
