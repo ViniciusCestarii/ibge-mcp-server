@@ -90,6 +90,39 @@ Usando o código local:
 }
 ```
 
+## Docker
+
+Build da imagem:
+
+```bash
+docker build -t ibge-mcp-server .
+```
+
+Executar (transporte `stdio`, precisa de `-i` para o MCP funcionar):
+
+```bash
+docker run -i --rm ibge-mcp-server
+```
+
+Passando variáveis de ambiente (ex.: `httpStream`):
+
+```bash
+docker run -i --rm -p 3000:3000 -e TRANSPORT_TYPE=httpStream -e PORT=3000 ibge-mcp-server
+```
+
+Usando no cliente MCP:
+
+```json
+{
+  "mcpServers": {
+    "ibge": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "ibge-mcp-server"]
+    }
+  }
+}
+```
+
 ## Testes
 
 Os testes são avaliações que rodam um agente real contra o servidor e comparam a resposta com o resultado esperado. Eles usam um `.env` próprio: copie `test/.env.test.example` para `test/.env.test` e preencha as chaves.
