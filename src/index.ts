@@ -1,13 +1,15 @@
+#!/usr/bin/env node
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js"
 import { createServer } from "node:http"
 import env from "./env.js"
 import * as registerTool from "./tools/index.js"
+import version from "./version.js"
 
 const server = new McpServer({
   name: "IBGE MCP Server",
-  version: "1.0.0",
+  version,
 })
 
 const tools = Object.values(registerTool)

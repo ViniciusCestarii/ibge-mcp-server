@@ -19,6 +19,14 @@ Servidor MCP que expõe as APIs públicas do IBGE (agregados e localidades) como
 
 ## Instalação
 
+Como pacote publicado no npm:
+
+```bash
+npx ibge-mcp-server
+```
+
+Para desenvolver localmente:
+
 ```bash
 npm install
 ```
@@ -56,6 +64,19 @@ Crie um arquivo `.env` na raiz do projeto. Todas as variáveis são opcionais e 
 | `IBGE_API_LOCALIDADES`  | `https://servicodados.ibge.gov.br/api/v1/localidades`    |
 
 ## Conectando a um cliente MCP
+
+```json
+{
+  "mcpServers": {
+    "ibge": {
+      "command": "npx",
+      "args": ["-y", "ibge-mcp-server"]
+    }
+  }
+}
+```
+
+Usando o código local:
 
 ```json
 {

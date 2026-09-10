@@ -1,11 +1,45 @@
 {
   "name": "ibge-mcp-server",
-  "module": "index.ts",
+  "version": "0.1.0",
+  "description": "MCP server for Brazilian IBGE public APIs",
   "type": "module",
-  "private": true,
+  "license": "MIT",
+  "author": "Vinicius Cestari",
+  "homepage": "https://github.com/ViniciusCestarii/ibge-mcp-server#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ViniciusCestarii/ibge-mcp-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ViniciusCestarii/ibge-mcp-server/issues"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "modelcontextprotocol",
+    "ibge",
+    "brasil",
+    "brazil"
+  ],
+  "main": "./dist/index.js",
+  "bin": {
+    "ibge-mcp-server": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc && tsc-alias",
-    "start": "node dist/src/index.js",
+    "prepublishOnly": "npm run build",
+    "start": "node dist/index.js",
     "dev": "tsx src/index.ts",
     "inspect": "npx @modelcontextprotocol/inspector@0.22.0 tsx src/index.ts",
     "lint": "eslint src/",
