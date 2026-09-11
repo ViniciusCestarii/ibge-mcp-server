@@ -2,6 +2,44 @@
 
 Servidor MCP que expõe as APIs públicas do IBGE (agregados e localidades) como ferramentas para agentes de IA.
 
+## Começando
+
+A forma mais fácil e gratuita de começar é conectar o servidor hospedado (https://ibge-mcp.viniciuscestari.dev/) ao [claude.ai](https://claude.ai):
+
+https://github.com/user-attachments/assets/9188823a-a72e-408b-88d4-7bbdb148333a
+
+```json
+{
+  "mcpServers": {
+    "ibge": {
+      "url": "https://ibge-mcp.viniciuscestari.dev/"
+    }
+  }
+}
+```
+
+### Compatibilidade
+
+| App                     | Como conectar                                                        |
+| ----------------------- | -------------------------------------------------------------------- |
+| Claude (web e desktop)  | De graça, é o caminho recomendado acima (o plano Free permite apenas um conector personalizado) |
+| ChatGPT (só na web)     | Só em planos pagos (Plus, Pro, Business, Enterprise ou Edu), ativando o modo desenvolvedor em Configurações > Apps e conectores; em Business e Enterprise o admin precisa liberar |
+| Gemini (app)            | Só pelo Gemini Spark (conta pessoal, plano AI Pro ou Ultra); fora disso, use o Gemini CLI |
+| Gemini CLI              | No `mcpServers` do `~/.gemini/settings.json` (ou `.gemini/settings.json` do projeto) |
+| Cursor                  | Em Settings > Tools & MCP (ou no `.cursor/mcp.json` do projeto)       |
+| VS Code (Copilot)       | Em modo agente, com `mcp.json`no workspace ou no perfil, leia: https://code.visualstudio.com/docs/copilot/customization/mcp-servers |
+| Outros clientes MCP     | Por URL (servidor hospedado) ou rodando localmente                    |
+
+Dica: pergunte para sua LLM como fazer caso tenha dúvidas.
+
+### Rodando localmente
+
+Em vez do servidor hospedado, é possível rodar na sua própria máquina:
+
+- Via `npx`, sem instalar nada: [Conectando a um cliente MCP](#conectando-a-um-cliente-mcp)
+- Via container: [Docker](#docker)
+- A partir do código: [Instalação](#instalação) e depois [Usando o código local](#conectando-a-um-cliente-mcp)
+
 ## Ferramentas
 
 | Ferramenta            | Descrição                                                          |
@@ -65,12 +103,26 @@ Crie um arquivo `.env` na raiz do projeto. Todas as variáveis são opcionais e 
 
 ## Conectando a um cliente MCP
 
+Usando direto do npm registry:
+
 ```json
 {
   "mcpServers": {
     "ibge": {
       "command": "npx",
       "args": ["-y", "ibge-mcp-server"]
+    }
+  }
+}
+```
+
+Usando servidor hospedado:
+
+```json
+{
+  "mcpServers": {
+    "ibge": {
+      "url": "https://ibge-mcp.viniciuscestari.dev/"
     }
   }
 }
