@@ -7,31 +7,58 @@ import env from "@/env.js"
 import * as registerTool from "@/tools/index.js"
 import version from "@/version.js"
 
-const server = new McpServer({
-  name: "IBGE MCP Server",
-  version,
-})
-
 const tools = Object.values(registerTool)
 
-for (const tool of tools) {
-  tool(server)
+function createMcpServer() {
+  const server = new McpServer({
+    name: "IBGE MCP Server",
+    version,
+  })
+
+  for (const tool of tools) {
+    tool(server)
+  }
+
+  return server
 }
 
 if (env.TRANSPORT_TYPE === "httpStream") {
-  const transport = new StreamableHTTPServerTransport({
-    sessionIdGenerator: undefined,
-  })
-  await server.connect(transport)
-
+  // fresh server + transport pair must be created for every request.
   const httpServer = createServer((req, res) => {
-    transport.handleRequest(req, res)
+    void (async () => {
+      try {
+        const server = createMcpServer()
+        const transport = new StreamableHTTPServerTransport({
+          sessionIdGenerator: undefined,
+        })
+
+        res.on("close", () => {
+          transport.close()
+          server.close()
+        })
+
+        await server.connect(transport)
+        await transport.handleRequest(req, res)
+      } catch (error) {
+        console.error("Error handling MCP request:", error)
+        if (!res.headersSent) {
+          res.writeHead(500, { "Content-Type": "application/json" }).end(
+            JSON.stringify({
+              jsonrpc: "2.0",
+              error: { code: -32603, message: "Internal server error" },
+              id: null,
+            }),
+          )
+        }
+      }
+    })()
   })
 
   httpServer.listen(env.PORT, () => {
     console.log(`IBGE MCP Server listening on http://localhost:${env.PORT}`)
   })
 } else {
+  const server = createMcpServer()
   const transport = new StdioServerTransport()
   await server.connect(transport)
 }
