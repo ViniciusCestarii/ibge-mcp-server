@@ -8,16 +8,6 @@ A forma mais fácil e gratuita de começar é conectar o servidor hospedado (htt
 
 https://github.com/user-attachments/assets/9188823a-a72e-408b-88d4-7bbdb148333a
 
-```json
-{
-  "mcpServers": {
-    "ibge": {
-      "url": "https://ibge-mcp.viniciuscestari.dev/"
-    }
-  }
-}
-```
-
 ### Compatibilidade
 
 | App                     | Como conectar                                                        |

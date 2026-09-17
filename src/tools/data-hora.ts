@@ -1,10 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 
-/** Os dados do IBGE são publicados em referência ao horário de Brasília. */
 const FUSO_HORARIO = "America/Sao_Paulo"
 
 interface DataHoraResponse {
-  /** Data e hora locais em ISO 8601 com offset, ex.: '2026-09-01T19:39:58-03:00'. */
   dataHora: string
   data: string
   hora: string
@@ -23,16 +21,10 @@ const formatter = new Intl.DateTimeFormat("en-CA", {
   hour: "2-digit",
   minute: "2-digit",
   second: "2-digit",
-  // h23 e não hour12:false, que em alguns locales devolve '24' à meia-noite.
   hourCycle: "h23",
   timeZoneName: "longOffset",
 })
 
-/**
- * Quebra o instante nos campos do fuso de Brasília. `Date` só sabe formatar em
- * UTC ou no fuso da máquina, então o `Intl` é quem faz a conversão — assim o
- * resultado não muda conforme o servidor onde isto roda.
- */
 function descreverInstante(agora: Date): DataHoraResponse {
   const partes = new Map(
     formatter
@@ -42,7 +34,6 @@ function descreverInstante(agora: Date): DataHoraResponse {
 
   const campo = (nome: Intl.DateTimeFormatPartTypes) => partes.get(nome) ?? ""
 
-  // 'GMT-03:00' -> '-03:00'; no horário de Greenwich o Intl devolve só 'GMT'.
   const offset = campo("timeZoneName").replace("GMT", "") || "+00:00"
 
   const data = `${campo("year")}-${campo("month")}-${campo("day")}`
@@ -74,7 +65,6 @@ export function registerDataHoraTool(server: McpServer) {
       annotations: {
         readOnlyHint: true,
         destructiveHint: false,
-        // O valor muda a cada chamada.
         idempotentHint: false,
         openWorldHint: false,
       },
