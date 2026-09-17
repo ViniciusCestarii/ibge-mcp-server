@@ -29,6 +29,7 @@ export function registerLocalidadesTool(server: McpServer) {
         "Use 'estado' para buscar um estado por nome ou sigla (ex.: 'São Paulo' ou 'SP'). " +
         "Para buscar uma cidade, use 'cidade' como objeto { estado, nome } para evitar ambiguidade, " +
         "pois existem cidades com o mesmo nome em estados diferentes. " +
+        "O nome da cidade deve ser completo e sem abreviações (ex.: 'São José dos Campos', não 'S. José dos Campos'). " +
         "É possível buscar estado e cidade na mesma chamada.",
       annotations: {
         readOnlyHint: true,
@@ -46,7 +47,11 @@ export function registerLocalidadesTool(server: McpServer) {
             estado: z
               .string()
               .describe("Nome ou sigla do estado da cidade, ex.: 'SP'"),
-            nome: z.string().describe("Nome da cidade, ex.: 'Campinas'"),
+            nome: z
+              .string()
+              .describe(
+                "Nome completo da cidade, sem abreviações, ex.: 'Campinas'",
+              ),
           })
           .optional()
           .describe(
