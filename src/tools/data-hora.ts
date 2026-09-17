@@ -57,8 +57,8 @@ export function registerDataHoraTool(server: McpServer) {
     {
       description:
         "Retorna a data e a hora atuais no fuso de Brasília (America/Sao_Paulo). " +
-        "Use antes de responder qualquer pergunta relativa ao momento presente — " +
-        "'hoje', 'ano passado', 'atualmente', 'último ano disponível' — para saber " +
+        "Use antes de responder qualquer pergunta relativa ao momento presente " +
+        "'hoje', 'ano passado', 'atualmente', 'último ano disponível' para saber " +
         "a que ano o usuário se refere, em vez de supor. " +
         "Atenção: o ano atual não é necessariamente o último período publicado de " +
         "uma pesquisa; para isso consulte os períodos do agregado.",

@@ -4,8 +4,8 @@ import { z } from "zod"
 const envSchema = z.object({
   TRANSPORT_TYPE: z.enum(["stdio", "httpStream"]).default("stdio"),
   PORT: z.preprocess(
-    (val) => (val === undefined ? undefined : Number(val)),
-    z.number().int().default(3000),
+    (val) => (val === undefined || val === "" ? undefined : Number(val)),
+    z.number().int().min(1).max(65535).default(3000),
   ),
   IBGE_API_AGREGADOS: z
     .url()
