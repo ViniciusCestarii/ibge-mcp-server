@@ -33,8 +33,9 @@ if (env.TRANSPORT_TYPE === "httpStream") {
         })
 
         res.on("close", () => {
-          transport.close()
-          server.close()
+          void Promise.all([transport.close(), server.close()]).catch((error) =>
+            console.error("Error closing MCP request:", error),
+          )
         })
 
         await server.connect(transport)
