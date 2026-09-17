@@ -22,7 +22,16 @@ export type Municipio = {
       nome: string
       UF: Estado
     }
-  }
+  } | null
+  "regiao-imediata": {
+    id: number
+    nome: string
+    "regiao-intermediaria": {
+      id: number
+      nome: string
+      UF: Estado
+    }
+  } | null
 }
 
 export type EstadoResponse = {

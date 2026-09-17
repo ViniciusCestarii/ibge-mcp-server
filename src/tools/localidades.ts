@@ -20,6 +20,10 @@ const matchEstado = (estado: Estado, busca: string) => {
   )
 }
 
+const ufDoMunicipio = (municipio: Municipio) =>
+  municipio.microrregiao?.mesorregiao.UF ??
+  municipio["regiao-imediata"]?.["regiao-intermediaria"].UF
+
 export function registerLocalidadesTool(server: McpServer) {
   server.registerTool(
     "localidades",
@@ -100,16 +104,19 @@ export function registerLocalidadesTool(server: McpServer) {
 
         const nomeNormalizado = normalize(cidade.nome)
 
-        const encontrados = response.data.filter(
-          (municipio) =>
+        const encontrados = response.data.filter((municipio) => {
+          const uf = ufDoMunicipio(municipio)
+          return (
             normalize(municipio.nome) === nomeNormalizado &&
-            matchEstado(municipio.microrregiao.mesorregiao.UF, cidade.estado),
-        )
+            !!uf &&
+            matchEstado(uf, cidade.estado)
+          )
+        })
 
         resultado.cidade =
           encontrados.length > 0
             ? encontrados.map((municipio) => {
-                const uf = municipio.microrregiao.mesorregiao.UF
+                const uf = ufDoMunicipio(municipio)!
                 return {
                   localidadeId: municipio.id,
                   nome: municipio.nome,
