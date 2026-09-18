@@ -9,10 +9,6 @@ export interface ProviderRunnerOptions {
   verbose?: boolean
 }
 
-/**
- * Runs the prompt through our own agentic loop (`runAgent`) on top of a raw
- * {@link AiProvider}, talking to the MCP server over stdio.
- */
 export class ProviderRunner implements AgentRunner {
   readonly name: string
   private readonly client = new McpTestClient()

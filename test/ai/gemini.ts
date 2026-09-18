@@ -12,7 +12,6 @@ const GEMINI_BASE_URL =
 
 interface GeminiPart {
   text?: string
-  /** Opaque signature Gemini 3.x requires echoed back with each functionCall. */
   thoughtSignature?: string
   functionCall?: { name: string; args?: Record<string, unknown> }
   functionResponse?: { name: string; response: Record<string, unknown> }
@@ -30,19 +29,11 @@ interface GeminiResponse {
 export interface GeminiProviderOptions {
   apiKey: string
   model: string
-  /** Max attempts for transient (429/5xx) errors. Default 4. */
   maxRetries?: number
 }
 
-/** HTTP statuses worth retrying with backoff. */
 const RETRYABLE_STATUS = new Set([429, 500, 502, 503, 504])
 
-/**
- * Gemini implementation of {@link AiProvider} using the v1beta REST endpoint.
- *
- * It maps the neutral {@link ProviderMessage} history onto Gemini `contents`
- * and exposes MCP tools as `function_declarations`.
- */
 export class GeminiProvider extends AiProvider {
   readonly name = "gemini"
   private readonly apiKey: string
@@ -93,7 +84,6 @@ export class GeminiProvider extends AiProvider {
           id: `${part.functionCall.name}-${index}`,
           name: part.functionCall.name,
           arguments: part.functionCall.args ?? {},
-          // Preserve the signature so it can be replayed in the next request.
           providerMetadata: part.thoughtSignature
             ? { thoughtSignature: part.thoughtSignature }
             : undefined,
@@ -107,12 +97,6 @@ export class GeminiProvider extends AiProvider {
     }
   }
 
-  /**
-   * POSTs to Gemini, retrying transient 429/5xx errors with exponential
-   * backoff. On failure it throws a concise Error (status + response body)
-   * instead of letting axios dump the whole request, which would leak the
-   * API key and flood the logs.
-   */
   private async post(url: string, body: unknown): Promise<GeminiResponse> {
     let lastError: unknown
 
@@ -150,7 +134,6 @@ export class GeminiProvider extends AiProvider {
   }
 }
 
-/** Turns an AxiosError into a compact Error without the request dump. */
 function toCleanError(error: unknown): Error {
   if (axios.isAxiosError(error)) {
     const status = error.response?.status ?? "no response"
@@ -199,10 +182,6 @@ function toGeminiContent(message: ProviderMessage): GeminiContent {
   }
 }
 
-/**
- * Strips JSON Schema keywords Gemini's function declarations reject
- * (e.g. `$schema`, `additionalProperties`) while keeping the structure.
- */
 function sanitizeSchema(schema: unknown): Record<string, unknown> {
   const stripKeys = new Set([
     "$schema",

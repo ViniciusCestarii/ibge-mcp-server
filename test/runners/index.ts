@@ -6,10 +6,6 @@ import { AgentRunner } from "./runner.js"
 
 export * from "./runner.js"
 
-/**
- * Builds the runner named by `TEST_RUNNER`, validating only the credentials
- * that runner actually needs.
- */
 export function createRunner(verbose = false): AgentRunner {
   switch (testEnv.TEST_RUNNER) {
     case "gemini": {
@@ -28,8 +24,6 @@ export function createRunner(verbose = false): AgentRunner {
       })
     }
     case "claude-code":
-      // Claude Code resolves its own credentials (an existing `claude` login or
-      // ANTHROPIC_API_KEY), so there is nothing to validate here.
       return new ClaudeCodeRunner({
         model: testEnv.CLAUDE_CODE_MODEL,
         maxTurns: testEnv.AGENT_MAX_ITERATIONS,

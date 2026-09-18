@@ -5,19 +5,12 @@ export type EvalCategory =
   | "agropecuaria"
   | "precos"
   | "registro-civil"
-  /** Exige cruzar mais de uma pesquisa na mesma resposta. */
   | "cruzado"
 
 export interface EvalCase {
   prompt: string
-  /**
-   * The real value the answer must contain, taken from the IBGE API itself
-   * (see `note` for the aggregate/variable it came from).
-   */
   expectedValue: number
-  /** Indicator family the prompt exercises. */
   category: EvalCategory
-  /** What the agent must figure out, plus any value still to be verified. */
   note?: string
 }
 
@@ -101,9 +94,7 @@ export const evalCases: EvalCase[] = [
       "O mais pesado da suíte: exige duas pesquisas em nível N3[all] (27 UFs cada, 54 séries no total), " +
       "cruzar as duas listas por UF, dividir e ranquear. Resposta: Rondônia, 17.688.225 bovinos " +
       "(agregado 3939, variável 105, classificação 79[2670]) / 1.581.196 habitantes " +
-      "(agregado 4714, variável 93) = 11,1866 cabeças/habitante. " +
-      "A margem para o 2º colocado é grande (Mato Grosso, 9,36), então arredondar não muda o vencedor; " +
-      "a tolerância de 2% aceita desde 'cerca de 11' até '11,19'.",
+      "(agregado 4714, variável 93) = 11,1866 cabeças/habitante.",
   },
 
   // --- Preços (decimal / percentual) -------------------------------------

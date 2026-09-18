@@ -1,17 +1,10 @@
 export interface ComparisonResult {
   passed: boolean
-  /** Every number parsed out of the answer text. */
   foundNumbers: number[]
-  /** The found number closest to the expected value, if any. */
   closest: number | null
-  /** Relative difference of `closest` vs expected (0 = exact). */
   relativeError: number | null
 }
 
-/**
- * Checks whether the model's answer contains the expected number (population,
- * GDP, a count, a percentage, etc.).
- */
 export function compareNumber(
   answer: string,
   expected: number,
@@ -40,12 +33,6 @@ export function compareNumber(
   }
 }
 
-/**
- * Pulls numbers out of text. For each numeric token it emits up to two
- * candidates: an integer reading (all separators removed) and, when the token
- * looks like it has a fractional part, a decimal reading. Being permissive
- * here just gives the comparison more chances to find the intended value.
- */
 function extractNumbers(text: string): number[] {
   const matches = text.match(/\d[\d.,\s]*\d|\d/g) ?? []
   const numbers = new Set<number>()
@@ -53,12 +40,9 @@ function extractNumbers(text: string): number[] {
   for (const raw of matches) {
     const token = raw.replace(/\s/g, "")
 
-    // Integer reading: drop every separator.
     const asInteger = Number(token.replace(/[^\d]/g, ""))
     if (Number.isFinite(asInteger)) numbers.add(asInteger)
 
-    // Decimal reading: treat the last separator as the decimal point when it
-    // is followed by 1-2 digits (e.g. "5,79" -> 5.79, "1.234,5" -> 1234.5).
     const decimalMatch = token.match(/^[\d.,]*[.,](\d{1,2})$/)
     if (decimalMatch) {
       const lastSep = Math.max(token.lastIndexOf(","), token.lastIndexOf("."))

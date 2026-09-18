@@ -9,11 +9,6 @@ const projectRoot = path.resolve(
   "..",
 )
 
-/**
- * Thin wrapper around the MCP client. It launches the real server as a
- * subprocess over stdio (`tsx src/index.ts`), so tests exercise the exact
- * tools an MCP host would see.
- */
 export class McpTestClient {
   private client: Client
   private transport: StdioClientTransport
@@ -39,7 +34,6 @@ export class McpTestClient {
     await this.client.close()
   }
 
-  /** Lists the server's tools in the provider-neutral shape. */
   async listTools(): Promise<ToolDefinition[]> {
     const { tools } = await this.client.listTools()
     return tools.map((tool) => ({
@@ -52,7 +46,6 @@ export class McpTestClient {
     }))
   }
 
-  /** Calls a tool and flattens its text content into a single string. */
   async callTool(name: string, args: Record<string, unknown>): Promise<string> {
     const result = await this.client.callTool({ name, arguments: args })
     const content = (result.content ?? []) as { type: string; text?: string }[]

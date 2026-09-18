@@ -8,15 +8,9 @@ export interface RunAgentOptions {
   client: McpTestClient
   prompt: string
   maxIterations: number
-  /** Set to log each tool call as it happens. */
   verbose?: boolean
 }
 
-/**
- * Drives the agentic loop: feed the prompt to the provider, execute whatever
- * tools it asks for via MCP, feed the results back, and repeat until the model
- * answers with text instead of tool calls (or we hit the iteration cap).
- */
 export async function runAgent({
   provider,
   client,
@@ -74,7 +68,7 @@ export async function runAgent({
   }
 
   return {
-    answer: `Limite de ${maxIterations} iterações atingido sem resposta final.`,
+    answer: `Reached the ${maxIterations}-iteration limit without a final answer.`,
     steps,
     iterations: maxIterations,
   }

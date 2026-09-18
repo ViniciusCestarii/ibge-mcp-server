@@ -15,22 +15,11 @@ const MCP_SERVER_NAME = "ibge"
 const TOOL_PREFIX = `mcp__${MCP_SERVER_NAME}__`
 
 export interface ClaudeCodeRunnerOptions {
-  /** Model alias or id; omit to use whatever Claude Code is configured with. */
   model?: string
   maxTurns: number
   verbose?: boolean
 }
 
-/**
- * Hands the prompt to the Claude Code harness and lets it run its own agentic
- * loop, with this project's MCP server wired in over stdio.
- *
- * Unlike {@link ProviderRunner} there is no loop of ours here: we only observe
- * the message stream to reconstruct the same {@link AgentRun} shape the
- * assertions expect. The harness is locked down on purpose — no built-in tools,
- * no filesystem settings — so a run exercises this server's tools and nothing
- * else.
- */
 export class ClaudeCodeRunner implements AgentRunner {
   readonly name = "claude-code"
   private readonly model?: string
@@ -43,14 +32,12 @@ export class ClaudeCodeRunner implements AgentRunner {
     this.verbose = verbose
   }
 
-  /** Claude Code spawns the MCP server itself, so there is nothing to set up. */
   async setup(): Promise<void> {}
 
   async teardown(): Promise<void> {}
 
   async run(prompt: string): Promise<AgentRun> {
     const steps: AgentStep[] = []
-    /** tool_use id -> index in `steps`, so results can be filled in later. */
     const stepByToolUseId = new Map<string, number>()
 
     let answer = ""
@@ -63,8 +50,6 @@ export class ClaudeCodeRunner implements AgentRunner {
         model: this.model,
         maxTurns: this.maxTurns,
         systemPrompt: SYSTEM_PROMPT,
-        // Only this server's tools: no Bash/Read/Write, and no user or project
-        // settings leaking in and changing what the model can reach.
         tools: [],
         settingSources: [],
         mcpServers: {
@@ -108,7 +93,6 @@ export class ClaudeCodeRunner implements AgentRunner {
         continue
       }
 
-      // Tool results come back as a synthetic user turn.
       if (message.type === "user") {
         const content = message.message.content
         if (typeof content === "string") continue
@@ -141,7 +125,6 @@ function stripPrefix(toolName: string): string {
     : toolName
 }
 
-/** Mirrors `McpTestClient.callTool`: keep the text, drop everything else. */
 function flattenToolResult(content: unknown): string {
   if (typeof content === "string") return content
   if (!Array.isArray(content)) return ""
