@@ -52,6 +52,16 @@ export class ClaudeCodeRunner implements AgentRunner {
         systemPrompt: SYSTEM_PROMPT,
         tools: [],
         settingSources: [],
+        // Nor MCP servers from elsewhere: .mcp.json, plugins or claude.ai
+        // connectors tied to the logged-in account.
+        strictMcpConfig: true,
+        env: {
+          ...process.env,
+          ENABLE_CLAUDEAI_MCP_SERVERS: "false",
+          // Keep large tool results inline instead of offloading them to a
+          // file the model has no tools to read.
+          MAX_MCP_OUTPUT_TOKENS: "200000",
+        },
         mcpServers: {
           [MCP_SERVER_NAME]: {
             type: "stdio",

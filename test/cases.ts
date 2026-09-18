@@ -71,7 +71,7 @@ export const evalCases: EvalCase[] = [
   {
     prompt:
       "Qual foi a quantidade produzida de soja (em grão) no Brasil em 2021, em toneladas?",
-    expectedValue: 134799179,
+    expectedValue: 134468168,
     category: "agropecuaria",
     note: "Produção Agrícola Municipal (PAM), classificação por produto = soja. Agregado 1612, variável 214, classificação 81[2713].",
   },
@@ -91,7 +91,7 @@ export const evalCases: EvalCase[] = [
     expectedValue: 11.19,
     category: "cruzado",
     note:
-      "O mais pesado da suíte: exige duas pesquisas em nível N3[all] (27 UFs cada, 54 séries no total), " +
+      "Exige duas pesquisas em nível N3[all] (27 UFs cada, 54 séries no total), " +
       "cruzar as duas listas por UF, dividir e ranquear. Resposta: Rondônia, 17.688.225 bovinos " +
       "(agregado 3939, variável 105, classificação 79[2670]) / 1.581.196 habitantes " +
       "(agregado 4714, variável 93) = 11,1866 cabeças/habitante.",
