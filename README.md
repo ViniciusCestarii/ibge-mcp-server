@@ -8,6 +8,9 @@ A forma mais fácil e gratuita de começar é conectar o servidor hospedado (htt
 
 https://github.com/user-attachments/assets/9188823a-a72e-408b-88d4-7bbdb148333a
 
+> [!NOTE]
+> Alguns clientes de IA têm acesso a uma ferramenta de busca na web e podem preferi-la ao serem perguntados sobre dados do IBGE, mesmo com o servidor MCP configurado corretamente. Nesse caso, peça explicitamente para usar o servidor MCP do IBGE (ex.: "use o MCP do IBGE para ...").
+
 ### Compatibilidade
 
 | App                     | Como conectar                                                        |
